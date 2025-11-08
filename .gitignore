@@ -1,0 +1,20 @@
+# Go build files
+/bin/
+/build/
+/dist/
+*.exe
+*.test
+
+# Go cache
+go.sum
+
+# IDE/Editor
+.idea/
+.vscode/
+
+# OS clutter
+.DS_Store
+
+# temporary files
+*.tmp
+*.cache
