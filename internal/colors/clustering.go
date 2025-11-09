@@ -23,8 +23,8 @@ func FromColor(c color.Color) Centroid {
 	}
 }
 
-// distanceSq calculates the squared Euclidean distance between two Centroids (points).
-func distanceSq(a, b Centroid) float32 {
+// DistanceSq calculates the squared Euclidean distance between two Centroids (points).
+func DistanceSq(a, b Centroid) float32 {
 	dr := float32(a.R) - float32(b.R)
 	dg := float32(a.G) - float32(b.G)
 	db := float32(a.B) - float32(b.B)
@@ -49,10 +49,10 @@ func assignPoints(points []Centroid, centroids []Centroid) []int {
 	for i, p := range points {
 		bestIdx := 0
 		// Initialize with the distance to the first centroid
-		bestDist := distanceSq(p, centroids[0])
+		bestDist := DistanceSq(p, centroids[0])
 
 		for j, c := range centroids {
-			if d := distanceSq(p, c); d < bestDist {
+			if d := DistanceSq(p, c); d < bestDist {
 				bestDist = d
 				bestIdx = j
 			}

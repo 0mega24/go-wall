@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/0mega24/go-wall/internal/colors"
+	"github.com/0mega24/go-wall/internal/colors/palette"
 	"github.com/0mega24/go-wall/internal/utils"
 	"github.com/0mega24/go-wall/internal/wallpaper"
 )
@@ -31,8 +32,20 @@ func main() {
 
 	centroids := colors.KMeans(pixels, 32, 10)
 
-	fmt.Println("\nDominant Colors (Hex):")
-	for _, c := range centroids {
-		fmt.Println(c.Hex())
-	}
+	palette.PrintHex(centroids)
+
+	filtered := palette.FilterSimilar(centroids, 1000)
+	palette.SortByBrightness(filtered)
+
+	ansiColors := palette.GenerateANSI(filtered, .6)
+	tones := palette.GenerateTones(filtered, 8)
+
+	fmt.Println("\nFiltered")
+	palette.PrintHex(filtered)
+
+	fmt.Println("\nANSI Colors:")
+	palette.PrintHex(ansiColors)
+
+	fmt.Println("\nTones Colors:")
+	palette.PrintHex(tones)
 }
