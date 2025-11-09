@@ -16,5 +16,6 @@ go.sum
 .DS_Store
 
 # temporary files
-*.tmp
+*.tmp*
+*.temp*
 *.cache
