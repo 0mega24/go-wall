@@ -5,7 +5,7 @@ import (
 	"image/color"
 )
 
-func GetPixels(img image.Image) []color.Color {
+func Colors(img image.Image) []color.Color {
 	bounds := img.Bounds()
 	pixels := make([]color.Color, 0, bounds.Dx()*bounds.Dy())
 

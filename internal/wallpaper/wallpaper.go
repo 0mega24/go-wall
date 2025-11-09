@@ -10,7 +10,8 @@ import (
 	"regexp"
 )
 
-func GetCurrentWallpaper() (string, error) {
+func CurrentWallpaperPath() (string, error) {
+	// feh stores the current wallpaper path in $HOME/.fehbg
 	file, err := os.Open(os.ExpandEnv("$HOME/.fehbg"))
 	if err != nil {
 		return "", err
@@ -18,11 +19,13 @@ func GetCurrentWallpaper() (string, error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+	// Regex to capture the path string inside single quotes in the feh command line
 	re := regexp.MustCompile(`'(.*)'`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		match := re.FindStringSubmatch(line)
+		// match[0] is the full match, match[1] is the captured path (inside the quotes)
 		if len(match) == 2 {
 			return match[1], nil
 		}
@@ -32,7 +35,7 @@ func GetCurrentWallpaper() (string, error) {
 		return "", err
 	}
 
-	return "", fmt.Errorf("wallpaper path not found")
+	return "", fmt.Errorf("wallpaper path not found in .fehbg")
 }
 
 func LoadImage(path string) (image.Image, error) {
