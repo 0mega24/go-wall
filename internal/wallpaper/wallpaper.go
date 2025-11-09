@@ -3,6 +3,9 @@ package wallpaper
 import (
 	"bufio"
 	"fmt"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
 	"regexp"
 )
@@ -30,4 +33,19 @@ func GetCurrentWallpaper() (string, error) {
 	}
 
 	return "", fmt.Errorf("wallpaper path not found")
+}
+
+func LoadImage(path string) (image.Image, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode image: %v", err)
+	}
+
+	return img, nil
 }
