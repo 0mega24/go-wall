@@ -1,0 +1,20 @@
+# Test ANSI 16-color set for go-wall -ansi-colors
+# Order: 0-7 normal (black,red,green,yellow,blue,magenta,cyan,white), 8-15 bright
+# Use: go-wall -ansi-colors testdata/ansi-colors-test.txt /path/to/image.png
+
+#000000
+#c23621
+#25bc24
+#adad27
+#2a3ccf
+#bc2ac0
+#33b5b5
+#e0e0e0
+#5a5a5a
+#ff5544
+#44ff44
+#ffff44
+#5544ff
+#ff44ff
+#44ffff
+#ffffff
