@@ -1,0 +1,35 @@
+# Go build files
+/bin/
+/build/
+/dist/
+*.exe
+*.test
+go-wall
+
+# IDE/Editor
+.idea/
+.vscode/
+
+# OS clutter
+.DS_Store
+.docs
+
+# temporary files
+*.tmp
+*.temp
+*.cache
+
+# Local / dev-only
+.dev/
+.dev/testdata/actual/
+
+# E2E / test actual output (generated, not committed)
+testdata/actual/
+
+# Generated documentation
+docs/
+internal/cli/docs/
+
+# Go workspace files (local multi-module dev only)
+go.work
+go.work.sum
