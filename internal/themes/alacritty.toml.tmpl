@@ -1,0 +1,24 @@
+# target: $HOME/.config/alacritty/colors.toml
+[colors.primary]
+background = "#{{ .Background }}"
+foreground = "#{{ .Foreground }}"
+
+[colors.normal]
+black   = "#{{ index .Ansi 0 }}"
+red     = "#{{ index .Ansi 1 }}"
+green   = "#{{ index .Ansi 2 }}"
+yellow  = "#{{ index .Ansi 3 }}"
+blue    = "#{{ index .Ansi 4 }}"
+magenta = "#{{ index .Ansi 5 }}"
+cyan    = "#{{ index .Ansi 6 }}"
+white   = "#{{ index .Ansi 7 }}"
+
+[colors.bright]
+black   = "#{{ index .Ansi 8 }}"
+red     = "#{{ index .Ansi 9 }}"
+green   = "#{{ index .Ansi 10 }}"
+yellow  = "#{{ index .Ansi 11 }}"
+blue    = "#{{ index .Ansi 12 }}"
+magenta = "#{{ index .Ansi 13 }}"
+cyan    = "#{{ index .Ansi 14 }}"
+white   = "#{{ index .Ansi 15 }}"

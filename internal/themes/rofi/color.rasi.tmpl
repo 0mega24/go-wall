@@ -1,0 +1,26 @@
+# target: $HOME/.config/rofi/color.rasi
+* {
+    black:         #{{ index .Ansi 0 }};
+    red:           #{{ index .Ansi 1 }};
+    green:         #{{ index .Ansi 2 }};
+    yellow:        #{{ index .Ansi 3 }};
+    blue:          #{{ index .Ansi 4 }};
+    magenta:       #{{ index .Ansi 5 }};
+    cyan:          #{{ index .Ansi 6 }};
+    white:         #{{ index .Ansi 7 }};
+
+    brightBlack:   #{{ index .Ansi 8 }};
+    brightRed:     #{{ index .Ansi 9 }};
+    brightGreen:   #{{ index .Ansi 10 }};
+    brightYellow:  #{{ index .Ansi 11 }};
+    brightBlue:    #{{ index .Ansi 12 }};
+    brightMagenta: #{{ index .Ansi 13 }};
+    brightCyan:    #{{ index .Ansi 14 }};
+    brightWhite:   #{{ index .Ansi 15 }};
+
+    background:    #{{ .Background }}bf;
+    transred:      #{{ index .Ansi 1 }}bf;
+
+    selectedItemBg: #{{ index .Tones 5 }}bf;
+    selectedItemFg:  #{{ .Foreground }};
+}
