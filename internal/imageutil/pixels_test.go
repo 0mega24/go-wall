@@ -25,7 +25,7 @@ func TestPixels_FullyOpaque(t *testing.T) {
 }
 
 func TestPixels_FullyTransparent(t *testing.T) {
-	// image.NewRGBA zero-initialises to transparent black (A=0).
+	// image.NewRGBA zero-initializes to transparent black (A=0).
 	img := image.NewRGBA(image.Rect(0, 0, 3, 3))
 	pixels := Pixels(img)
 	assert.Len(t, pixels, 0, "fully transparent image should yield 0 pixels, got %d", len(pixels))

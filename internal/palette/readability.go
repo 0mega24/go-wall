@@ -10,19 +10,23 @@ func centroidToGolor(c color.Centroid) golor.Color {
 	return golor.RGB(c.R, c.G, c.B)
 }
 
+// Luminance returns the relative luminance (0–1) of c per WCAG 2.1.
 func Luminance(c color.Centroid) float32 {
 	return float32(golorcontrast.Luminance(centroidToGolor(c)))
 }
 
+// ContrastRatio returns the WCAG 2.1 contrast ratio between a and b.
 func ContrastRatio(a, b color.Centroid) float32 {
 	return float32(golorcontrast.Ratio(centroidToGolor(a), centroidToGolor(b)))
 }
 
+// Minimum WCAG contrast thresholds used throughout the palette pipeline.
 const (
 	MinFGBGContrast = 4.5
 	MinANSIContrast = 3.0
 )
 
+// EnsureFGBGReadable lightens fg until ContrastRatio(fg, bg) >= minRatio.
 func EnsureFGBGReadable(fg, bg color.Centroid, minRatio float32) (newFG, newBG color.Centroid) {
 	newBG = bg
 	if ContrastRatio(fg, bg) >= minRatio {
@@ -110,6 +114,7 @@ func blendToward(c, target color.Centroid, t float32) color.Centroid {
 	return color.Centroid{R: clampByte(r), G: clampByte(g), B: clampByte(b)}
 }
 
+// EnsureANSIReadable raises each unpinned ANSI color until it meets minRatio contrast against bg.
 func EnsureANSIReadable(ansi []color.Centroid, bg color.Centroid, minRatio float32, pinned map[int]bool) []color.Centroid {
 	if len(ansi) == 0 {
 		return ansi
@@ -129,6 +134,7 @@ func EnsureANSIReadable(ansi []color.Centroid, bg color.Centroid, minRatio float
 	return out
 }
 
+// EnsureTonesReadable adjusts adjacent tone pairs until each meets minRatio contrast.
 func EnsureTonesReadable(tones []color.Centroid, minRatio float32) []color.Centroid {
 	if len(tones) < 2 || minRatio <= 0 {
 		return tones

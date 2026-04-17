@@ -3,6 +3,7 @@ package wallpaper
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 // EnvSource reads the wallpaper path from environment variable GOWALL_IMAGE
@@ -21,7 +22,7 @@ func (envSource) WallpaperPath() (string, error) {
 		return "", fmt.Errorf("GOWALL_IMAGE and WALLPAPER not set")
 	}
 	path = os.ExpandEnv(path)
-	if _, err := os.Stat(path); err != nil {
+	if _, err := os.Stat(filepath.Clean(path)); err != nil {
 		return "", err
 	}
 	return path, nil

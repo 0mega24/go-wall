@@ -11,8 +11,10 @@ import (
 // The seed controls the random initial centroid placement for reproducibility.
 type KMeansPP struct{}
 
+// Name returns the algorithm identifier "kmeans++".
 func (KMeansPP) Name() string { return "kmeans++" }
 
+// Cluster runs k-means++ on pixels and returns k centroids.
 func (KMeansPP) Cluster(pixels []imageutil.WeightedPixel, k, iterations, maxSamples int, seed int64, onStep func(int, string, []Centroid)) []Centroid {
 	if len(pixels) == 0 || k <= 0 {
 		return nil

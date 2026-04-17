@@ -21,7 +21,7 @@ var swaybgPaths = []string{
 func (swaybgSource) WallpaperPath() (string, error) {
 	for _, p := range swaybgPaths {
 		exp := os.ExpandEnv(p)
-		b, err := os.ReadFile(exp)
+		b, err := os.ReadFile(filepath.Clean(exp))
 		if err != nil {
 			continue
 		}
@@ -35,7 +35,7 @@ func (swaybgSource) WallpaperPath() (string, error) {
 		// might be relative to config dir
 		dir := filepath.Dir(exp)
 		if abs, err := filepath.Abs(filepath.Join(dir, path)); err == nil {
-			if _, err := os.Stat(abs); err == nil {
+			if _, err := os.Stat(filepath.Clean(abs)); err == nil {
 				return abs, nil
 			}
 		}

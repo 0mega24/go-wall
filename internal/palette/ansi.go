@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -36,7 +37,7 @@ func ParseANSIHex(hexes []string) ([]color.Centroid, error) {
 // LoadANSIHexFile reads a file with one hex color per line. Blank lines and comment lines
 // (lines starting with # that are not #rrggbb) are skipped. Use for -ansi-colors path.
 func LoadANSIHexFile(path string) ([]color.Centroid, error) {
-	f, err := os.Open(path)
+	f, err := os.Open(filepath.Clean(path))
 	if err != nil {
 		return nil, err
 	}

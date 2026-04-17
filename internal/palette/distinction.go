@@ -5,6 +5,7 @@ import (
 	"github.com/0mega24/gowall/internal/color"
 )
 
+// Perceptual distance thresholds for distinguishability checks.
 const (
 	MinDistSq        float32 = 1200
 	MinLuminanceStep float32 = 1.12
@@ -14,6 +15,7 @@ const (
 // unstable hue from near-grey inputs (e.g. B&W images) producing a green/red tint.
 const minSaturationForHue float32 = 0.02
 
+// SetLuminance adjusts the luminance of c to targetL (0–1) while preserving hue and saturation.
 func SetLuminance(c color.Centroid, targetL float32) color.Centroid {
 	gc := centroidToGolor(c)
 	hsl := golorconvert.ToHSL(gc)
@@ -26,6 +28,7 @@ func SetLuminance(c color.Centroid, targetL float32) color.Centroid {
 	return color.Centroid{R: result.R8(), G: result.G8(), B: result.B8()}
 }
 
+// SpreadANSILuminanceLevels raises each ANSI color's luminance to meet minContrast against bg.
 func SpreadANSILuminanceLevels(ansi []color.Centroid, bg color.Centroid, minContrast float32, pinned map[int]bool) []color.Centroid {
 	if len(ansi) != 16 {
 		return ansi
@@ -61,6 +64,7 @@ func SpreadANSILuminanceLevels(ansi []color.Centroid, bg color.Centroid, minCont
 	return out
 }
 
+// EnsureTonesDistinguishable spreads tones evenly across the luminance range.
 func EnsureTonesDistinguishable(tones []color.Centroid) []color.Centroid {
 	if len(tones) < 2 {
 		return tones
@@ -77,6 +81,7 @@ func EnsureTonesDistinguishable(tones []color.Centroid) []color.Centroid {
 	return out
 }
 
+// EnsureDistinguishable nudges colors until each pair is at least minDistSq apart and meets minContrast against bg.
 func EnsureDistinguishable(colorsList []color.Centroid, minDistSq float32, bg color.Centroid, minContrast float32) []color.Centroid {
 	if len(colorsList) <= 1 {
 		return colorsList

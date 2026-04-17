@@ -20,7 +20,7 @@ func (nitrogenSource) Name() string { return "nitrogen" }
 func (nitrogenSource) WallpaperPath() (string, error) {
 	home := os.Getenv("HOME")
 	cfgPath := filepath.Join(home, ".config", "nitrogen", "bg-saved.cfg")
-	f, err := os.Open(cfgPath)
+	f, err := os.Open(filepath.Clean(cfgPath))
 	if err != nil {
 		return "", fmt.Errorf("nitrogen: %w", err)
 	}

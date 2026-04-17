@@ -21,7 +21,7 @@ type CLIConfig struct {
 	Algorithm        string
 	Constraints      map[int]pipeline.SlotConstraint
 	BackgroundHex    string
-	GlobalAdjust pipeline.GlobalAdjust
+	GlobalAdjust     pipeline.GlobalAdjust
 }
 
 // Merge applies config defaults to a CLIConfig.

@@ -3,16 +3,17 @@ package themes
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 var (
-	reColorRefBG = regexp.MustCompile(`(?i)^\s*\.\s*Background\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
-	reColorRefFG = regexp.MustCompile(`(?i)^\s*\.\s*Foreground\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
-	reColorRefAnsi = regexp.MustCompile(`(?i)^\s*\.\s*Ansi\s+(\d+)\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
+	reColorRefBG    = regexp.MustCompile(`(?i)^\s*\.\s*Background\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
+	reColorRefFG    = regexp.MustCompile(`(?i)^\s*\.\s*Foreground\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
+	reColorRefAnsi  = regexp.MustCompile(`(?i)^\s*\.\s*Ansi\s+(\d+)\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
 	reColorRefTones = regexp.MustCompile(`(?i)^\s*\.\s*Tones\s+(\d+)\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
-	reColorRefTFA = regexp.MustCompile(`(?i)^\s*\.\s*TonesFromANSI\s+(\d+)\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
+	reColorRefTFA   = regexp.MustCompile(`(?i)^\s*\.\s*TonesFromANSI\s+(\d+)\s*=\s*#?([0-9a-fA-F]{6})\s*$`)
 )
 
 // ParseColorReference parses a Gowall Color Reference document (same format as
@@ -122,7 +123,7 @@ func parseIdx(s string, min, max int) int {
 
 // LoadColorReferenceFile reads and parses a color reference file.
 func LoadColorReferenceFile(path string) (ThemeData, error) {
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return ThemeData{}, err
 	}

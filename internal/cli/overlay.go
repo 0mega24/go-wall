@@ -56,20 +56,6 @@ func tooSmallOverlay(termW, termH, needW, needH int) string {
 	return lipgloss.Place(termW, termH, lipgloss.Center, lipgloss.Center, box)
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func clamp(v, lo, hi int) int {
 	if v < lo {
 		return lo
@@ -115,8 +101,8 @@ func viewportPlainView(vp viewport.Model, content string) string {
 
 // scrollOverlayConfig controls sizing and the static hint line for a scrollable overlay.
 type scrollOverlayConfig struct {
-	MinH, MaxH int // box height range inclusive of border; MaxH=0 means use termH
-	MinW, MaxW int // box width range inclusive of border; MaxW=0 means use termW
+	MinH, MaxH int    // box height range inclusive of border; MaxH=0 means use termH
+	MinW, MaxW int    // box width range inclusive of border; MaxW=0 means use termW
 	Hint       string // rendered below box, never scrolls
 }
 
@@ -191,5 +177,5 @@ func (o scrollOverlay) dimensions(termW, termH int) (boxW, boxH, innerW, innerH 
 	boxH = clamp((termH*3)/4, o.cfg.MinH, maxH)
 	innerW = max(12, boxW-4)
 	innerH = max(4, boxH-4)
-	return
+	return boxW, boxH, innerW, innerH
 }

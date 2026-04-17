@@ -1,3 +1,4 @@
+// Package palette derives and adjusts color palettes from clustered image colors.
 package palette
 
 import (
@@ -8,6 +9,7 @@ import (
 	"github.com/0mega24/gowall/internal/color"
 )
 
+// ByBrightness implements sort.Interface to order centroids from darkest to brightest.
 type ByBrightness []color.Centroid
 
 func (b ByBrightness) Len() int      { return len(b) }
@@ -19,6 +21,7 @@ func (b ByBrightness) Less(i, j int) bool {
 	return brightness(b[i]) < brightness(b[j])
 }
 
+// FilterSimilar removes colors that are within threshold squared-distance of an already-kept color.
 func FilterSimilar(colorsList []color.Centroid, threshold float32) []color.Centroid {
 	if len(colorsList) == 0 {
 		return nil
@@ -39,6 +42,7 @@ func FilterSimilar(colorsList []color.Centroid, threshold float32) []color.Centr
 	return filtered
 }
 
+// GenerateTones derives n evenly-spaced luminance tone steps from the input pixels.
 func GenerateTones(pixels []color.Centroid, n int) []color.Centroid {
 	if n <= 0 || len(pixels) == 0 {
 		return nil
@@ -175,6 +179,7 @@ func hsvToRgb(h, s, v float32) (r, g, b float32) {
 	}
 }
 
+// GenerateANSI builds a 16-color ANSI palette from filtered colors at the given brightness level.
 func GenerateANSI(filtered []color.Centroid, brightness float32) []color.Centroid {
 	if len(filtered) == 0 {
 		return nil
@@ -244,7 +249,7 @@ func indexMaxLuminance(pool []color.Centroid) int {
 	return best
 }
 
-func padRemToSix(rem []color.Centroid, pool []color.Centroid) []color.Centroid {
+func padRemToSix(rem, pool []color.Centroid) []color.Centroid {
 	if len(rem) >= 6 {
 		return rem
 	}
@@ -256,17 +261,6 @@ func padRemToSix(rem []color.Centroid, pool []color.Centroid) []color.Centroid {
 		rem = append(rem, filler)
 	}
 	return rem
-}
-
-func hueCircularDist(h1, h2 float32) float32 {
-	d := h1 - h2
-	if d < 0 {
-		d = -d
-	}
-	if d > 0.5 {
-		d = 1 - d
-	}
-	return d
 }
 
 // slotHueRankPerm[i] is which ascending-hue rank (0 = smallest in the six) fills
@@ -342,9 +336,7 @@ func selectDiverseCentroids(colors []color.Centroid, k int) []color.Centroid {
 	}
 	if len(colors) <= k {
 		out := make([]color.Centroid, k)
-		for i := 0; i < len(colors); i++ {
-			out[i] = colors[i]
-		}
+		copy(out, colors)
 		last := colors[len(colors)-1]
 		for i := len(colors); i < k; i++ {
 			out[i] = last
@@ -426,12 +418,14 @@ func clampByte(val float32) uint8 {
 	return uint8(val)
 }
 
+// PrintHex prints each color as a #rrggbb hex string to stdout.
 func PrintHex(colorsList []color.Centroid) {
 	for _, c := range colorsList {
 		fmt.Println(c.Hex())
 	}
 }
 
+// SortByBrightness sorts colorsList in-place from darkest to brightest.
 func SortByBrightness(colorsList []color.Centroid) {
 	sort.Sort(ByBrightness(colorsList))
 }

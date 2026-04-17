@@ -11,10 +11,10 @@ import (
 func EnsureTemplatesInstalled() error {
 	home := os.Getenv("HOME")
 	dir := filepath.Join(home, ".config", "gowall", "templates")
-	if _, err := os.Stat(dir); err == nil {
+	if _, err := os.Stat(filepath.Clean(dir)); err == nil {
 		return nil // already installed
 	}
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Clean(dir), 0o750); err != nil {
 		return err
 	}
 	return fs.WalkDir(embedTemplates, ".", func(path string, d fs.DirEntry, err error) error {
@@ -25,10 +25,10 @@ func EnsureTemplatesInstalled() error {
 		if err != nil {
 			return err
 		}
-		dst := filepath.Join(dir, path)
-		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+		dst := filepath.Clean(filepath.Join(dir, path))
+		if err := os.MkdirAll(filepath.Dir(dst), 0o750); err != nil {
 			return err
 		}
-		return os.WriteFile(dst, content, 0o644)
+		return os.WriteFile(filepath.Clean(dst), content, 0o600)
 	})
 }

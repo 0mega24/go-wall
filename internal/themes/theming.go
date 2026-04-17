@@ -1,3 +1,4 @@
+// Package themes discovers, renders, and installs gowall theme templates.
 package themes
 
 import (
@@ -12,6 +13,7 @@ import (
 //go:embed *.tmpl polybar/*.tmpl rofi/*.tmpl
 var embedTemplates embed.FS
 
+// ThemeData holds all color values rendered into theme templates.
 type ThemeData struct {
 	Background    string   // hex without # (e.g. "1a1a1a")
 	Foreground    string   // hex
@@ -154,7 +156,7 @@ func DiscoverTemplates() ([]Template, error) {
 		}
 		id := strings.TrimSuffix(entry.Name(), ".tmpl")
 		srcPath := filepath.Join(dir, entry.Name())
-		content, err := os.ReadFile(srcPath)
+		content, err := os.ReadFile(filepath.Clean(srcPath))
 		if err != nil {
 			return nil, fmt.Errorf("reading template %s: %w", entry.Name(), err)
 		}
@@ -202,10 +204,10 @@ func Apply(id string, data ThemeData) error {
 	if err != nil {
 		return fmt.Errorf("parsing template %s: %w", found.SourcePath, err)
 	}
-	if err := os.MkdirAll(filepath.Dir(found.TargetPath), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(found.TargetPath), 0o750); err != nil {
 		return fmt.Errorf("creating output directory for %s: %w", found.TargetPath, err)
 	}
-	f, err := os.Create(found.TargetPath)
+	f, err := os.Create(filepath.Clean(found.TargetPath))
 	if err != nil {
 		return fmt.Errorf("creating output file %s: %w", found.TargetPath, err)
 	}
@@ -237,7 +239,7 @@ Examples:
 
 // ApplyTemplate renders a template from the filesystem (for tests or custom paths).
 func ApplyTemplate(templatePath, outputPath string, data ThemeData) error {
-	raw, err := os.ReadFile(templatePath)
+	raw, err := os.ReadFile(filepath.Clean(templatePath))
 	if err != nil {
 		return err
 	}
@@ -246,7 +248,7 @@ func ApplyTemplate(templatePath, outputPath string, data ThemeData) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(outputPath)
+	f, err := os.Create(filepath.Clean(outputPath))
 	if err != nil {
 		return err
 	}
@@ -267,7 +269,7 @@ func ApplyEmbedded(name, outputPath string, data ThemeData) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(outputPath)
+	f, err := os.Create(filepath.Clean(outputPath))
 	if err != nil {
 		return err
 	}

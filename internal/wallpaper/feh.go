@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 )
 
@@ -13,7 +14,7 @@ func (fehSource) Name() string { return "feh" }
 
 func (fehSource) WallpaperPath() (string, error) {
 	path := os.ExpandEnv("$HOME/.fehbg")
-	f, err := os.Open(path)
+	f, err := os.Open(filepath.Clean(path))
 	if err != nil {
 		return "", err
 	}

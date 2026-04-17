@@ -19,13 +19,13 @@ var hyprlandConfigPaths = []string{
 	"$HOME/.config/hypr/hyprland.conf",
 }
 
-// wallpaper = path or monitor,path
+// wallpaper = path or monitor,path.
 var hyprWallpaperRe = regexp.MustCompile(`wallpaper\s*=\s*([^,\s]+)`)
 
 func (hyprlandSource) WallpaperPath() (string, error) {
 	for _, p := range hyprlandConfigPaths {
 		exp := os.ExpandEnv(p)
-		f, err := os.Open(exp)
+		f, err := os.Open(filepath.Clean(exp))
 		if err != nil {
 			continue
 		}

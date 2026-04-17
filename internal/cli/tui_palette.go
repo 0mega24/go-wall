@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -32,13 +33,13 @@ func (m tuiModel) viewPaletteTab() string {
 }
 
 type paletteSnapshot struct {
-	result              *pipeline.Result
-	swatchMode          int
-	vpWidth             int
-	manualEditOpen      bool
-	manualSlot          int
-	manualHexBuf        string
-	hasManualANSI       bool
+	result         *pipeline.Result
+	swatchMode     int
+	vpWidth        int
+	manualEditOpen bool
+	manualSlot     int
+	manualHexBuf   string
+	hasManualANSI  bool
 }
 
 func newPaletteSnapshot(m tuiModel) tabBuilder {
@@ -333,5 +334,5 @@ func exportColorReference(result *pipeline.Result, path string) error {
 		fmt.Fprintf(&b, "# Filtered[%-2d]         = %s\n", i, c.Hex())
 	}
 
-	return os.WriteFile(path, []byte(b.String()), 0o644)
+	return os.WriteFile(filepath.Clean(path), []byte(b.String()), 0o600)
 }

@@ -1,9 +1,11 @@
+// Package cli implements the gowall command-line interface and TUI.
 package cli
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	icolor "github.com/0mega24/gowall/internal/color"
@@ -15,18 +17,18 @@ import (
 
 // Config holds CLI configuration (flags).
 type Config struct {
-	ImagePath           string // empty = detect from wallpaper sources
-	ColorReferencePath  string // if set, load theme from this Gowall Color Reference file (skip image pipeline)
-	Templates           string // comma-separated built-in IDs
-	TemplateList        string // path to file listing templates
-	RetoneANSI          bool   // use standard 16 ANSI retoned to wallpaper
-	CustomANSIColors    string // path to file with 16 hex colors (one per line); implies retone with that set
-	Quiet               bool
-	Seed                int64 // if non-zero, deterministic k-means (e.g. for tests)
-	Constraints         map[int]pipeline.SlotConstraint // per-slot constraints: pin, H/S/V lock, post-gen tweak
-	BackgroundHex       string                          // optional: override background color (#rrggbb)
-	Algorithm           string                          // clustering algorithm name (empty = kmeans++)
-	GlobalAdjust        pipeline.GlobalAdjust           // global hue (deg) + S/V % scale before per-slot constraints
+	ImagePath          string // empty = detect from wallpaper sources
+	ColorReferencePath string // if set, load theme from this Gowall Color Reference file (skip image pipeline)
+	Templates          string // comma-separated built-in IDs
+	TemplateList       string // path to file listing templates
+	RetoneANSI         bool   // use standard 16 ANSI retoned to wallpaper
+	CustomANSIColors   string // path to file with 16 hex colors (one per line); implies retone with that set
+	Quiet              bool
+	Seed               int64                           // if non-zero, deterministic k-means (e.g. for tests)
+	Constraints        map[int]pipeline.SlotConstraint // per-slot constraints: pin, H/S/V lock, post-gen tweak
+	BackgroundHex      string                          // optional: override background color (#rrggbb)
+	Algorithm          string                          // clustering algorithm name (empty = kmeans++)
+	GlobalAdjust       pipeline.GlobalAdjust           // global hue (deg) + S/V % scale before per-slot constraints
 }
 
 // Run runs the full flow: resolve image, run pipeline, print progress and swatches, apply templates.
@@ -191,7 +193,7 @@ func ApplyTheme(theme themes.ThemeData, templateIDs []string) error {
 // ApplyThemeFromList reads a template-list file and applies each entry to the given theme.
 // Same format as -template-list: id, id<tab>out, or file<tab>tmpl<tab>out per line.
 func ApplyThemeFromList(theme themes.ThemeData, listPath string) error {
-	f, err := os.Open(listPath)
+	f, err := os.Open(filepath.Clean(listPath))
 	if err != nil {
 		return err
 	}

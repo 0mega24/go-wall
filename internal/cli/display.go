@@ -77,16 +77,14 @@ var sectionBoxStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("#555555")).
 	Padding(0, 1)
 
-// SectionBoxInnerWidth is the number of character cells available for text inside
-// a SectionBox whose width argument equals the desired inner content width.
-// lipgloss Width() sets the inner content area; border (1+1) + padding (1+1) = 4
-// chars of frame are added around it. We keep 1 char of slack so ANSI-heavy rows
-// (swatches) never exactly hit the measured inner boundary.
+// SectionBoxInnerWidth returns the text cell width available inside a SectionBox
+// with the given outer (viewport) width. The overhead is: 2 border + 2 padding + 1
+// slack so ANSI-heavy rows never exactly hit the measured inner boundary.
 func SectionBoxInnerWidth(boxWidth int) int {
 	if boxWidth < 10 {
 		boxWidth = 10
 	}
-	return max(0, boxWidth-1)
+	return max(0, boxWidth-5)
 }
 
 // SwatchGridCols picks a column count for swatch grids so rows stay within the
@@ -121,9 +119,8 @@ func truncateLinesToDisplayWidth(s string, maxW int) string {
 }
 
 // SectionBox wraps content in a titled bordered lipgloss box.
-// width is the inner content width (lipgloss Width() semantics); the rendered
-// outer box will be width+4 chars wide (1 border + 1 padding on each side).
-// Callers should pass vpWidth-4 so the outer box exactly fills the viewport.
+// width is the desired outer (terminal) width; the rendered box will be exactly
+// width chars wide. Pass the viewport width directly.
 func SectionBox(title, content string, width int) string {
 	if width < 10 {
 		width = 10
@@ -132,7 +129,7 @@ func SectionBox(title, content string, width int) string {
 	title = truncateLinesToDisplayWidth(title, innerW)
 	content = truncateLinesToDisplayWidth(content, innerW)
 	inner := title + "\n" + content
-	return sectionBoxStyle.Width(width).Render(inner) + "\n"
+	return sectionBoxStyle.Width(width-2).Render(inner) + "\n"
 }
 
 // hexRe matches bare #rrggbb hex color strings (case-insensitive, word boundary).

@@ -1,3 +1,4 @@
+// Package pipeline orchestrates the full gowall color extraction and theme generation workflow.
 package pipeline
 
 import (
@@ -36,7 +37,7 @@ type Options struct {
 	Constraints     map[int]SlotConstraint // Per-slot constraints: pin, H/S/V lock, post-gen tweak
 	BackgroundHex   string                 // Optional: override background color (#rrggbb)
 	Clusterer       color.Clusterer        // nil = default (kmeans++)
-	GlobalAdjust GlobalAdjust // global hue + S/V % scale; readability/spread run after (see Run)
+	GlobalAdjust    GlobalAdjust           // global hue + S/V % scale; readability/spread run after (see Run)
 }
 
 // DefaultOptions returns sensible defaults.

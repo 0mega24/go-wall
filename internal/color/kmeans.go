@@ -12,8 +12,10 @@ import (
 // Unlike k-means++, the seed here selects the initial centroids uniformly at random.
 type KMeansLloyd struct{}
 
+// Name returns the algorithm identifier "kmeans".
 func (KMeansLloyd) Name() string { return "kmeans" }
 
+// Cluster runs Lloyd's k-means algorithm on pixels and returns k centroids.
 func (KMeansLloyd) Cluster(pixels []imageutil.WeightedPixel, k, iterations, maxSamples int, seed int64, onStep func(int, string, []Centroid)) []Centroid {
 	if len(pixels) == 0 || k <= 0 {
 		return nil

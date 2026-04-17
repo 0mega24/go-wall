@@ -1,3 +1,4 @@
+// Package color implements image color extraction and quantization algorithms.
 package color
 
 import (

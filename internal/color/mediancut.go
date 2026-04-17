@@ -12,8 +12,10 @@ import (
 // It is fully deterministic — seed is accepted by the interface but ignored.
 type MedianCut struct{}
 
+// Name returns the algorithm identifier "mediancut".
 func (MedianCut) Name() string { return "mediancut" }
 
+// Cluster runs median-cut quantization on pixels and returns k centroids.
 func (MedianCut) Cluster(pixels []imageutil.WeightedPixel, k, _, maxSamples int, _ int64, onStep func(int, string, []Centroid)) []Centroid {
 	if len(pixels) == 0 || k <= 0 {
 		return nil
@@ -165,12 +167,14 @@ func axisRange(bucket []Centroid, ax axis) int {
 func sortBucket(bucket []Centroid, ax axis) {
 	sort.Slice(bucket, func(i, j int) bool {
 		switch ax {
+		case axisR:
+			return bucket[i].R < bucket[j].R
 		case axisG:
 			return bucket[i].G < bucket[j].G
 		case axisB:
 			return bucket[i].B < bucket[j].B
 		default:
-			return bucket[i].R < bucket[j].R
+			return false
 		}
 	})
 }

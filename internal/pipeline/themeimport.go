@@ -28,7 +28,7 @@ func ResultFromThemeData(theme themes.ThemeData) (Result, error) {
 	for i := 0; i < 16; i++ {
 		c, err := ParseHex(theme.Tones[i])
 		if err != nil {
-			return Result{}, fmt.Errorf("Tones %d: %w", i, err)
+			return Result{}, fmt.Errorf("tones %d: %w", i, err)
 		}
 		tones[i] = c
 	}

@@ -26,10 +26,10 @@ func QuantizeImage(img image.Image, centroids []Centroid) image.Image {
 // SavePNG writes any image.Image to a PNG file at path.
 // Parent directories are created as needed.
 func SavePNG(img image.Image, path string) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o750); err != nil {
 		return err
 	}
-	f, err := os.Create(path)
+	f, err := os.Create(filepath.Clean(path))
 	if err != nil {
 		return err
 	}

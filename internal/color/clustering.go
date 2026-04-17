@@ -11,9 +11,9 @@ import (
 // newRNG returns a seeded rand.Rand. If seed == 0, a random seed is used.
 func newRNG(seed int64) *rand.Rand {
 	if seed != 0 {
-		return rand.New(rand.NewSource(seed))
+		return rand.New(rand.NewSource(seed)) //nolint:gosec
 	}
-	return rand.New(rand.NewSource(rand.Int63()))
+	return rand.New(rand.NewSource(rand.Int63())) //nolint:gosec
 }
 
 const (
@@ -189,9 +189,9 @@ func KMeansWithOptions(pixels []imageutil.WeightedPixel, k, iterations, maxSampl
 	}
 	var rng *rand.Rand
 	if seed != 0 {
-		rng = rand.New(rand.NewSource(seed))
+		rng = rand.New(rand.NewSource(seed)) //nolint:gosec
 	} else {
-		rng = rand.New(rand.NewSource(rand.Int63()))
+		rng = rand.New(rand.NewSource(rand.Int63())) //nolint:gosec
 	}
 
 	all := pixelsToWeightedPoints(pixels)

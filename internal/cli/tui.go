@@ -103,10 +103,10 @@ type tuiModel struct {
 
 	// wallpaper picking
 	filePicker   filepicker.Model
-	pickPathEdit bool   // true: type a path (Ctrl+p) instead of browsing
+	pickPathEdit bool // true: type a path (Ctrl+p) instead of browsing
 	pickPathBuf  string
 	pickPathErr  string
-	pickColorRef bool   // true: pick a Gowall Color Reference file instead of an image
+	pickColorRef bool // true: pick a Gowall Color Reference file instead of an image
 
 	// pipeline
 	spinner    spinner.Model
@@ -133,7 +133,7 @@ type tuiModel struct {
 	hexInputValues [16]string
 	hexInputs      [16]*huh.Input
 	constraints    map[int]pipeline.SlotConstraint
-	globalAdjust pipeline.GlobalAdjust
+	globalAdjust   pipeline.GlobalAdjust
 
 	// templates tab
 	templates      map[string]bool
@@ -144,14 +144,14 @@ type tuiModel struct {
 	hideBuiltin    bool
 
 	// help overlay
-	showHelp     bool
-	helpOverlay  scrollOverlay
+	showHelp    bool
+	helpOverlay scrollOverlay
 
 	// palette tab
 	swatchMode      int // 0=labeled 1=gradient
 	paletteViewport viewport.Model
 	// Unverified manual ANSI overrides (palette tab); reapplied after each pipeline run.
-	paletteManualANSI   [16]*icolor.Centroid
+	paletteManualANSI     [16]*icolor.Centroid
 	paletteManualEditOpen bool
 	paletteManualSlot     int
 	paletteManualHexBuf   string
@@ -173,11 +173,11 @@ type tuiModel struct {
 	resizeSeq uint64
 
 	// async tab bodies: View reads renderedContent; expensive builds run as tea.Cmd.
-	renderedContent  [numTabs]string
-	contentDirty     [numTabs]bool
-	contentBuilding  [numTabs]bool
-	configDebounceSeq  uint64
-	adjustDebounceSeq  uint64
+	renderedContent   [numTabs]string
+	contentDirty      [numTabs]bool
+	contentBuilding   [numTabs]bool
+	configDebounceSeq uint64
+	adjustDebounceSeq uint64
 
 	// lastBuiltResizeSeq records m.resizeSeq when tab body was last applied; used for stale UI hints.
 	lastBuiltResizeSeq [numTabs]uint64
@@ -325,8 +325,7 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// only one list row is visible.
 		var fpCmd tea.Cmd
 		m.filePicker, fpCmd = m.filePicker.Update(msg)
-		cmds = append(cmds, fpCmd)
-		cmds = append(cmds, tea.Tick(resizeDebounce, func(time.Time) tea.Msg {
+		cmds = append(cmds, fpCmd, tea.Tick(resizeDebounce, func(time.Time) tea.Msg {
 			return resizeDebouncedMsg{seq: seq}
 		}))
 		// Refresh visible tab body immediately so layout tracks resize in real time; debounced
@@ -711,7 +710,7 @@ func (m tuiModel) applyPickPath() (tea.Model, tea.Cmd) {
 }
 
 func (m tuiModel) handlePickPathKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.Type {
+	switch msg.Type { //nolint:exhaustive
 	case tea.KeyEnter:
 		return m.applyPickPath()
 	case tea.KeyEscape:
@@ -934,7 +933,7 @@ func tabBorderOpen() lipgloss.Border {
 func tabBorderClosed() lipgloss.Border {
 	b := lipgloss.RoundedBorder()
 	b.BottomLeft = "┴"
-		b.BottomRight = "┴"
+	b.BottomRight = "┴"
 	return b
 }
 

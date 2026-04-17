@@ -98,7 +98,7 @@ func TestParseTemplateHeaders(t *testing.T) {
 			wantBody:   "body\n",
 		},
 		{
-			desc:       "unrecognised comment stops header block",
+			desc:       "unrecognized comment stops header block",
 			input:      "# target: $HOME/.config/foo.conf\n# random comment\nbody\n",
 			wantTarget: filepath.Join(home, ".config", "foo.conf"),
 			wantBody:   "# random comment\nbody\n",

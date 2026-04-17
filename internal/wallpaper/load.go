@@ -1,3 +1,4 @@
+// Package wallpaper detects and loads the current desktop wallpaper image.
 package wallpaper
 
 import (
@@ -8,6 +9,7 @@ import (
 	"image/png"
 	"io"
 	"os"
+	"path/filepath"
 
 	"golang.org/x/image/bmp"
 	"golang.org/x/image/tiff"
@@ -45,7 +47,7 @@ func detectFormat(r io.Reader) (string, io.Reader, error) {
 
 // LoadImage decodes an image file (JPEG, PNG, WebP, TIFF, BMP) and returns it.
 func LoadImage(path string) (image.Image, error) {
-	f, err := os.Open(path)
+	f, err := os.Open(filepath.Clean(path))
 	if err != nil {
 		return nil, fmt.Errorf("opening image: %w", err)
 	}

@@ -1,3 +1,4 @@
+// Package config loads and persists the gowall TOML configuration file.
 package config
 
 import (
@@ -23,7 +24,7 @@ type Defaults struct {
 	Algorithm   string                  `toml:"algorithm"`
 	Pipeline    PipelineDefaults        `toml:"pipeline"`
 	Constraints map[int]ConstraintEntry `toml:"constraints"`
-	HideBuiltin bool `toml:"hide_builtin"`
+	HideBuiltin bool                    `toml:"hide_builtin"`
 	// GlobalTweakH: hue shift in degrees. GlobalTweakS/V: percent multipliers on S/V (see pipeline.GlobalAdjust).
 	GlobalTweakH float64 `toml:"global_tweak_h"`
 	GlobalTweakS float64 `toml:"global_tweak_s"` // Sat%  (multiply S by 1+S/100)
@@ -85,10 +86,10 @@ func Save(cfg Config) error {
 	if err != nil {
 		return err
 	}
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o750); err != nil {
 		return err
 	}
-	f, err := os.Create(path)
+	f, err := os.Create(filepath.Clean(path))
 	if err != nil {
 		return err
 	}
@@ -96,8 +97,8 @@ func Save(cfg Config) error {
 	return toml.NewEncoder(f).Encode(cfg)
 }
 
-// ConfigPath returns the path to the gowall config file (for display purposes).
-func ConfigPath() (string, error) {
+// Path returns the path to the gowall config file (for display purposes).
+func Path() (string, error) {
 	return configPath()
 }
 

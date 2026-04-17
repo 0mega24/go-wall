@@ -1,3 +1,4 @@
+// Package imageutil provides helpers for decoding images into weighted pixel samples.
 package imageutil
 
 import (

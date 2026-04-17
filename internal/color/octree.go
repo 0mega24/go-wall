@@ -11,8 +11,10 @@ import (
 // It is fully deterministic — seed is accepted by the interface but ignored.
 type OctreeQuantizer struct{}
 
+// Name returns the algorithm identifier "octree".
 func (OctreeQuantizer) Name() string { return "octree" }
 
+// Cluster runs octree quantization on pixels and returns k centroids.
 func (OctreeQuantizer) Cluster(pixels []imageutil.WeightedPixel, k, _, maxSamples int, _ int64, onStep func(int, string, []Centroid)) []Centroid {
 	if len(pixels) == 0 || k <= 0 {
 		return nil
