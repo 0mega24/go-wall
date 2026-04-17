@@ -26,9 +26,8 @@ go-wall
 # E2E / test actual output (generated, not committed)
 testdata/actual/
 
-# Generated documentation
-docs/
-internal/cli/docs/
+# Generated documentation (root-level only; internal/cli/docs/ is committed)
+/docs/
 
 # Go workspace files (local multi-module dev only)
 go.work

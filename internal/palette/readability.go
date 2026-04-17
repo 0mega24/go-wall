@@ -15,7 +15,7 @@ func Luminance(c color.Centroid) float32 {
 }
 
 func ContrastRatio(a, b color.Centroid) float32 {
-	return float32(golorcontrast.ContrastRatio(centroidToGolor(a), centroidToGolor(b)))
+	return float32(golorcontrast.Ratio(centroidToGolor(a), centroidToGolor(b)))
 }
 
 const (
