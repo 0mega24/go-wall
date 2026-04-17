@@ -1,11 +1,91 @@
 version: "2"
 
+run:
+  timeout: 5m
+
 linters:
+  default: none
   enable:
-    - errcheck
+    # Correctness
     - govet
+    - errcheck
     - staticcheck
     - ineffassign
+    - unused
+    - exhaustive
+    - unconvert
+    - nakedret
+    # Security
+    - gosec
+    # Style / readability
+    - revive
+    - gocritic
+    - misspell
+    - godot
+    - whitespace
+    # Performance
+    - prealloc
+
+  exclusions:
+    rules:
+      # Test files get a looser pass on style rules.
+      - path: _test\.go
+        linters:
+          - gocritic
+          - revive
+          - gosec
+
+  settings:
+    staticcheck:
+      # Enable all check suites: SA (bugs), S (simplifications), ST (style), QF (quickfixes).
+      checks: ["all"]
+
+    exhaustive:
+      # A default branch does not satisfy exhaustiveness; all enum values must be explicit.
+      default-signifies-exhaustive: false
+
+    nakedret:
+      # Flag naked returns in functions longer than 5 lines.
+      max-func-lines: 5
+
+    gosec:
+      excludes:
+        # G115: integer overflow on conversion. Safe here because color channel
+        # values are bounded to [0, 255] before conversion to uint8.
+        - G115
+
+    revive:
+      rules:
+        - name: exported
+        - name: var-naming
+        - name: error-strings
+        - name: if-return
+        - name: increment-decrement
+        - name: range
+        - name: receiver-naming
+        - name: unexported-return
+        - name: indent-error-flow
+        - name: errorf
+        - name: empty-block
+        - name: superfluous-else
+
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+      disabled-checks:
+        # Color structs are small value types intentionally passed by value.
+        - hugeParam
+        # commentedOutCode fires on descriptive test labels which are not
+        # commented-out code; disable globally rather than fighting path exclusions.
+        - commentedOutCode
+
+    godot:
+      # Only require periods on declaration-level doc comments (not inline const labels).
+      scope: declarations
+
+    misspell:
+      locale: US
 
 formatters:
   enable:
@@ -14,5 +94,6 @@ formatters:
     gofumpt:
       extra-rules: true
 
-run:
-  timeout: 5m
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

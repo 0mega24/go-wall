@@ -8,7 +8,7 @@ ifeq ($(GO),)
 $(error Go not found in PATH)
 endif
 
-.PHONY: build install uninstall test lint fmt fmt-check clean
+.PHONY: build install uninstall test vet lint fix fmt fmt-check clean
 
 build:
 	$(GO) build -o bin/$(BINARY) ./cmd/$(BINARY)
@@ -20,13 +20,22 @@ uninstall:
 	rm -f $(DESTDIR)/$(BINARY)
 
 test:
-	$(GO) test ./...
+	$(GO) test -race -count=1 ./...
+
+vet:
+	$(GO) vet ./...
 
 lint:
 ifeq ($(LINT),)
 	$(error golangci-lint not found in PATH)
 endif
 	$(LINT) run
+
+fix:
+ifeq ($(LINT),)
+	$(error golangci-lint not found in PATH)
+endif
+	$(LINT) run --fix
 
 fmt:
 ifeq ($(GOFUMPT),)
