@@ -176,4 +176,4 @@ result, err := gowall.RunFromPath(path, gowall.DefaultOptions())
 
 ## License
 
-Apache 2.0
+Apache 2.0, see [LICENSE](LICENSE).
